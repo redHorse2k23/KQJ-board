@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="js/operator_listener.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/default.js"></script>
+  <script src="js/shuffle.js"></script>
+  <script src="js/declare.js"></script>
+
+
+  <link rel="stylesheet" href="css/bootstrap.min.css" >
+</head>
+
+<body onload="triggerActions()">
+  <div class="container" style="margin-top: 50px;">
+    <div class="alert alert-success alert-dismissible fade show" id="alert_success" role="alert" style="display: none;">
+      <strong>Display updated!</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <h1>Throw #
+      <button id="currentThrowNumber" type="button" class="btn btn-primary" onclick="setThrowNum()" ></button>
+    </h1>
+
+
+    <h4 id="shuffleTextContainer">Shuffle will stop automatically in : <span id="shuffleHeaderText"></span></h4>
+
+    <div id="">
+
+      <button id="openTimerButton" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none;" onclick="startOpenTimer()" >OPEN  <span id="time" class="badge badge-light"></span></button>
+      <button id="resetOpenTimerButton" type="button" class="btn btn-danger" style="width: 100%; margin-top: 20px; display: none;"  onclick="resetOpenTimer()" >RESET  <span id="time" class="badge badge-light"></span></button>
+      <button id="openPauseButton" type="button" class="btn btn-outline-primary" style="width: 100%; margin-top: 20px; display: none">Pause</button>
+      <button id="openResumeButton" type="button" class="btn btn-outline-primary" style="width: 100%; margin-top: 20px; display: none">Resume</button>
+
+
+      <button id="lastCallTimerButton" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none;" onclick="startLastCallTimer()" >LAST CALL  <span id="time" class="badge badge-light"></span></button>
+      <button id="resetLastCallTimerButton" type="button" class="btn btn-danger" style="width: 100%; margin-top: 20px; display: none;"  onclick="resetLastCallTimer()" >RESET  LAST CALL<span id="time" class="badge badge-light"></span></button>
+      <button id="backToOpenButton" type="button" class="btn btn-success" style="width: 100%; margin-top: 20px; display: none;"  onclick="backToOpen()" >BACK TO OPEN<span id="time" class="badge badge-light"></span></button>
+      <button id="lastCallPauseButton" type="button" class="btn btn-outline-primary"  style="width: 100%; margin-top: 20px; display: none">Pause</button>
+      <button id="lastCallResumeButton" type="button" class="btn btn-outline-primary"  style="width: 100%; margin-top: 20px; display: none">Resume</button>
+
+
+      <button id="startShuffleButton" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none;" onclick="setToShuffling()" >START SHUFFLE<span id="time" class="badge badge-light"></span></button>
+      <button id="stopShuffleButton" type="button" class="btn btn-danger" style="width: 100%; margin-top: 20px; display: none;"  onclick="stopShuffling()" >STOP SHUFFLE<span id="time" class="badge badge-light"></span></button>
+      <button id="declareWinnerButton" type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px; display: none;"  onclick="declareWinner()" >DECLARE WINNER<span id="time" class="badge badge-light"></span></button>
+      <button id="backToLastCallButton" type="button" class="btn btn-success" style="width: 100%; margin-top: 20px; display: none;"  onclick="backToLastCall()" >BACK TO LAST CALL<span id="time" class="badge badge-light"></span></button>
+      <button id="shufflePauseButton" type="button" class="btn btn-outline-primary"  style="width: 100%; margin-top: 20px; display: none">Pause</button>
+
+
+
+      <button id="winnerButtonRed" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none; background: #EA0606;" onclick="declareRed()" >RED<span id="time" class="badge badge-light"></span></button>
+      <button id="winnerButtonBlue" type="button" class="btn btn-danger" style="width: 100%; margin-top: 20px; display: none; background: #061CF3;"  onclick="declareBlue()" >BLUE<span id="time" class="badge badge-light"></span></button>
+      <button id="winnerButtonYellow" type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px; display: none; background: #F1D806; color:black"  onclick="declareYellow()" >YELLOW<span id="time" class="badge badge-light"></span></button>
+      <button id="winnerButtonCancel" type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px; display: none; background: gray;"  onclick="declareCancel()" >CANCEL<span id="time" class="badge badge-light"></span></button>
+
+      <button id="startNewThrowButton" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none;" onclick="startNewThrow()" >NEW THROW<span id="time" class="badge badge-light"></span></button>
+
+    </div>
+
+  </div>
+</body>
+
+</html>
+
+<script>
+
+
+  function setToShuffling()
+  {
+    localStorage.setItem("status", "shuffling");
+    localStorage.setItem("shuffle", "true");
+    startShuffleTimer();
+  }
+
+  function stopShuffling()
+  {
+    localStorage.setItem("isShuffleCalledOnce", "false");
+    localStorage.setItem("status", "shufflingStop");
+    localStorage.setItem("shuffle", "false");
+    localStorage.setItem("shuffleDurationCounter", 10);
+    document.getElementById('shufflePauseButton').click();
+
+  }
+
+
+  function declareWinner()
+  {
+    localStorage.setItem("status", "declaration");
+    localStorage.setItem("shuffle", "false");
+  }
+
+
+  function startNewThrow()
+  {
+
+    setThrowNum();
+
+    for (let i = 1; i < 37; i++) {
+      var blockNumber = "block"+i;
+      localStorage.setItem(blockNumber, "white");
+    }
+    localStorage.setItem("lastcallCounter", 30);
+    localStorage.setItem("openCounter", 15);
+
+    //
+    // localStorage.setItem("lastcallCounter", 1);
+    // localStorage.setItem("openCounter", 1);
+    localStorage.setItem("shuffleDurationCounter", 10);
+    localStorage.setItem("status", 'openHold');
+    localStorage.setItem("isLastCallCalledOnce", "false");
+    localStorage.setItem("isShuffleCalledOnce", "false");
+    localStorage.setItem("isWinnerAnnounced", "false");
+    localStorage.setItem("isRefreshedOnce", "false");
+    localStorage.setItem("isStartCalledOnce", "false");
+    localStorage.setItem("initiateNewThrow", "true");
+    localStorage.setItem("shuffle","true");
+
+  }
+
+
+
+  function triggerActions()
+  {
+    if(localStorage.getItem("wasPageRefreshed") == "true")
+    {
+      if(localStorage.getItem("status") != "openHold" && localStorage.getItem("status") == "open")
+        {
+          localStorage.setItem("wasPageRefreshed", "false");
+          startOpenTimer();
+        }
+
+      if(localStorage.getItem("status") != "lastCallHold" && localStorage.getItem("status") == "lastcall")
+        {
+          localStorage.setItem("wasPageRefreshed", "false");
+          startLastCallTimer();
+        }
+
+    }
+    else
+    {
+
+    }
+  }
+
+  function setThrowNum() {
+      var throwNumber = parseInt(localStorage.getItem("throw_number"));
+      if(Number.isInteger(throwNumber)){
+        throwNumber = prompt("Please Enter Throw Number: ", throwNumber + 1);
+        if(throwNumber){
+          localStorage.setItem("throw_number", throwNumber);
+
+          $.ajax({
+            url: "write.php",
+            type: "post",
+            data: {thrown_num: throwNumber} ,
+            success: function (response) {
+              document.getElementById("alert_success").style.display = "block";
+              setTimeout(function(){ document.getElementById("alert_success").style.display = "none"; }, 2000);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+          });
+        }
+      }else{
+        throwNumber = prompt("Please Enter Throw Number: ", localStorage.getItem("throw_number"));
+        if(throwNumber){
+          localStorage.setItem("throw_number", throwNumber);
+
+          $.ajax({
+            url: "write.php",
+            type: "post",
+            data: {thrown_num: throwNumber} ,
+            success: function (response) {
+              document.getElementById("alert_success").style.display = "block";
+              setTimeout(function(){ document.getElementById("alert_success").style.display = "none"; }, 2000);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+          });
+        }
+      }
+  }
+
+  window.onbeforeunload = function(){
+      localStorage.setItem("wasPageRefreshed", "true");
+      return "Are you sure you want to close the window?";
+  }
+
+</script>
