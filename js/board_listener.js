@@ -36,30 +36,30 @@
       	{
       		_("openCounterDiv").style.display = "none";
       		_("lastCallCounterDiv").style.display = "block";
-
-          if(localStorage.lastcallCounter >=25){
-            for (let i = 1; i < 4; i++) {
-               var blockNumber = "_block"+i;
-              _(blockNumber).style.background = "#c7c7c7";
-              _(blockNumber).getElementsByClassName('contents')[0].innerHTML = "";
-            }
-              _("lastCallHeaderText").style.color = "white";
-              _("lastCallHeaderText").parentElement.style.background = "";
-              _("lastCallHeaderText").parentElement.style.boxShadow = "";
-              _("lastCallHeaderText").parentElement.style.border = "";
-              _("lastCallTimerText").style.color = "rgb(239 29 19 / 86%)";
-          }
-      	}
-
-
-        if(localStorage.getItem("lastcallCounter") > 10)
-        {
-             for (let i = 1; i < 4; i++) {
-              var blockNumber = "_block"+i;
-              _(blockNumber).style.background = "#c7c7c7";
-              _(blockNumber).getElementsByClassName('contents')[0].innerHTML = "";
-            }
         }
+
+        if(localStorage.lastcallCounter > 10){
+          for (let i = 1; i < 4; i++) {
+              var blockNumber = "_block"+i;
+            _(blockNumber).style.background = "#c7c7c7";
+            _(blockNumber).getElementsByClassName('contents')[0].innerHTML = "";
+          }
+            _("lastCallHeaderText").style.color = "white";
+            _("lastCallHeaderText").parentElement.style.background = "";
+            _("lastCallHeaderText").parentElement.style.boxShadow = "";
+            _("lastCallHeaderText").parentElement.style.border = "";
+            _("lastCallTimerText").style.color = "rgb(239 29 19 / 86%)";
+        }
+
+
+        // if(localStorage.getItem("lastcallCounter") > 10)
+        // {
+        //      for (let i = 1; i < 4; i++) {
+        //       var blockNumber = "_block"+i;
+        //       _(blockNumber).style.background = "#c7c7c7";
+        //       _(blockNumber).getElementsByClassName('contents')[0].innerHTML = "";
+        //     }
+        // }
 
 
         if(localStorage.getItem("lastcallCounter") <= 10)

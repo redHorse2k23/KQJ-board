@@ -25,7 +25,6 @@
       <button id="currentThrowNumber" type="button" class="btn btn-primary" onclick="setThrowNum()" ></button>
     </h1>
 
-
     <h4 id="shuffleTextContainer">Shuffle will stop automatically in : <span id="shuffleHeaderText"></span></h4>
 
     <div id="">
@@ -44,11 +43,16 @@
 
 
       <button id="startShuffleButton" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none;" onclick="setToShuffling()" >START SHUFFLE<span id="time" class="badge badge-light"></span></button>
+      <!-- <button id="shuffleResumeButton" type="button" class="btn btn-outline-primary"  style="width: 100%; margin-top: 20px; display: none" onclick="resumeShuffling()">Resume SHUFFLE</button> -->
       <button id="stopShuffleButton" type="button" class="btn btn-danger" style="width: 100%; margin-top: 20px; display: none;"  onclick="stopShuffling()" >STOP SHUFFLE<span id="time" class="badge badge-light"></span></button>
       <button id="declareWinnerButton" type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px; display: none;"  onclick="declareWinner()" >DECLARE WINNER<span id="time" class="badge badge-light"></span></button>
       <button id="backToLastCallButton" type="button" class="btn btn-success" style="width: 100%; margin-top: 20px; display: none;"  onclick="backToLastCall()" >BACK TO LAST CALL<span id="time" class="badge badge-light"></span></button>
-      <button id="shufflePauseButton" type="button" class="btn btn-outline-primary"  style="width: 100%; margin-top: 20px; display: none">Pause</button>
 
+      <!-- <button id="startShuffleButton" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none;" onclick="setToShuffling()" >START SHUFFLE<span id="time" class="badge badge-light"></span></button>
+      <button id="stopShuffleButton" type="button" class="btn btn-danger" style="width: 100%; margin-top: 20px; display: none;"  onclick="stopShuffling()" >STOP SHUFFLE<span id="time" class="badge badge-light"></span></button>
+      <button id="declareWinnerButton" type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px; display: none;"  onclick="declareWinner()" >DECLARE WINNER<span id="time" class="badge badge-light"></span></button>
+      <button id="backToLastCallButton" type="button" class="btn btn-success" style="width: 100%; margin-top: 20px; display: none;"  onclick="backToLastCall()" >BACK TO LAST CALL<span id="time" class="badge badge-light"></span></button>
+      <button id="shufflePauseButton" type="button" class="btn btn-outline-primary"  style="width: 100%; margin-top: 20px; display: none">Pause</button> -->
 
 
       <button id="winnerButtonRed" type="button" class="btn btn-success"  style="width: 100%; margin-top: 20px; display: none; background: #EA0606;" onclick="declareRed()" >RED<span id="time" class="badge badge-light"></span></button>
@@ -72,7 +76,13 @@
   {
     localStorage.setItem("status", "shuffling");
     localStorage.setItem("shuffle", "true");
-    startShuffleTimer();
+    window._shuffle_.start();
+  }
+  function resumeShuffling()
+  {
+    localStorage.setItem("status", "shuffling");
+    localStorage.setItem("shuffle", "true");
+    window._shuffle_.resume();
   }
 
   function stopShuffling()
@@ -80,9 +90,7 @@
     localStorage.setItem("isShuffleCalledOnce", "false");
     localStorage.setItem("status", "shufflingStop");
     localStorage.setItem("shuffle", "false");
-    localStorage.setItem("shuffleDurationCounter", 10);
-    document.getElementById('shufflePauseButton').click();
-
+    window._shuffle_.stop();
   }
 
 
@@ -90,6 +98,8 @@
   {
     localStorage.setItem("status", "declaration");
     localStorage.setItem("shuffle", "false");
+    localStorage.shuffleDurationCounter = 0;
+    window._shuffle_.stop();
   }
 
 
@@ -98,10 +108,10 @@
 
     setThrowNum();
 
-    for (let i = 1; i < 37; i++) {
-      var blockNumber = "block"+i;
-      localStorage.setItem(blockNumber, "white");
-    }
+    // for (let i = 1; i < 37; i++) {
+    //   var blockNumber = "block"+i;
+    //   localStorage.setItem(blockNumber, "white");
+    // }
     localStorage.setItem("lastcallCounter", 30);
     localStorage.setItem("openCounter", 15);
 

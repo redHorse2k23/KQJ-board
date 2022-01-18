@@ -1,4 +1,9 @@
+window._shuffle_ = new testShuffe();
+
 function startOpenTimer(){
+    if(!localStorage.throw_number||localStorage.throw_number=="null"){
+        setThrowNum();
+    }
 
   localStorage.setItem("mode", "automatic");
 
@@ -177,14 +182,10 @@ function resetOpenTimer(){
     document.getElementById("openPauseButton").click();
     document.getElementById("lastCallPauseButton").click();
 
-    for (let i = 1; i < 37; i++) {
-      var blockNumber = "block"+i;
-      localStorage.setItem(blockNumber, "white");
-    }
-
-    // localStorage.setItem("lastcallCounter", 1);
-    // localStorage.setItem("openCounter", 1);
-
+    // for (let i = 1; i < 37; i++) {
+    //   var blockNumber = "block"+i;
+    //   localStorage.setItem(blockNumber, "white");
+    // }
 
     localStorage.setItem("lastcallCounter", 30);
     localStorage.setItem("openCounter", 15);
@@ -195,79 +196,51 @@ function resetOpenTimer(){
     localStorage.setItem("isRefreshedOnce", "false");
     localStorage.setItem("isStartCalledOnce", "false");
 
-
   }
 
 
-
-  function startShuffleTimer (){
-
-    var speaking_ms = "00:00:10";
-    var speaking_ms_arr = speaking_ms.split(":");
-    var speaking_time_min_sec = (+speaking_ms_arr[0]) * 60 * 60 + (+speaking_ms_arr[1]) * 60 + (+speaking_ms_arr[2]);
-    var speaking_time_min_sec = parseInt(speaking_time_min_sec) + 1;
-
-    var speaking_value;
-
-    if (localStorage.getItem("shuffleDurationCounter")) {
-        if (localStorage.getItem("shuffleDurationCounter") <= 0) {
-            speaking_value = speaking_time_min_sec;
-        } else {
-            speaking_value = localStorage.getItem("shuffleDurationCounter");
-        }
-    } else {
-        speaking_value = speaking_time_min_sec;
-    }
-
-    var shuffleDurationCounter = function() {
-        if (speaking_value <= 0) {
-            localStorage.setItem("shuffleDurationCounter", speaking_time_min_sec);
-        } else {
-            speaking_value = parseInt(speaking_value) - 1;
-            localStorage.setItem("shuffleDurationCounter", speaking_value);
-        }
-        if (speaking_value == 0) {
-            localStorage.setItem("status", "declaration");
-            localStorage.setItem("shuffleDurationCounter", speaking_value);
-            setTimeout(function() {
-                clearInterval(interval);
+  
+  function testShuffe(){
+    interval = null;
+    i = ()=>{
+        return setInterval(function() {
+                if(localStorage.shuffleDurationCounter>0){
+                    localStorage.shuffleDurationCounter --;
+                }else{
+                    this.stop();
+                    localStorage.setItem("status", "declaration");
+                    localStorage.setItem("shuffleDurationCounter", 10);
+                }
             }, 1000);
-        }
-
-    };
-
-    var interval = setInterval(function() {
-        shuffleDurationCounter();
-    }, 1000);
-
-
-    var Clock = {
-        pause: function() {
-                clearInterval(interval);
-                interval = null;
-                localStorage.setItem("shufflePause", "true");
-            },
-
-            resume: function() {
-                if (!interval) interval = setInterval(lastcallCounter, 1000);
-                localStorage.setItem("shufflePause", "false");
-
+    }
+    var c = {
+        start:()=>{
+            localStorage.shuffleDurationCounter = 10; 
+            if(this.interval){
+                clearInterval(this.interval);
+                this.interval = null;
             }
-    };
-
-
-      // document.getElementById('stopShuffleButton').onclick = Clock.pause;
-      document.getElementById('shufflePauseButton').onclick = Clock.pause;
-      // document.getElementById('shuffleResumeButton').onclick = Clock.resume;
-
-
+            this.interval = i();
+        },
+        stop:()=>{
+            clearInterval(this.interval);
+            this.interval = null;
+        },
+        resume:()=>{
+            this.interval = i();
+        }
+    }
+    return c;
   }
-
-
+  function startShuffleTimer(){
+    window._shuffle_.start();
+    document.getElementById('shufflePauseButton').onclick = window._shuffle_.stop();
+  }
 
 function backToLastCall()
 {
 
+    window._shuffle_.stop();
     document.getElementById("shufflePauseButton").click();
 
 
@@ -282,7 +255,3 @@ function backToLastCall()
     localStorage.setItem("isStartCalledOnce", "false");
 
 }
-
-// function _(el){
-//     return document.getElementById(el);
-// }

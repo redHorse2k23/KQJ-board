@@ -105,8 +105,8 @@
             document.getElementById("declareWinnerButton").style.display = "block";
             document.getElementById("backToLastCallButton").style.display = "block";
         }
-
-
+        
+        
         if(localStorage.getItem("status") == "shuffling")
         {
             hideButtons();
@@ -115,11 +115,14 @@
             document.getElementById("declareWinnerButton").style.display = "block";
             document.getElementById("backToLastCallButton").style.display = "block";
         }
-
-
+        
+        
     	if(localStorage.getItem("status") == "shufflingStop")
     	{
             hideButtons();
+            // if(localStorage.shuffleDurationCounter<=9){
+            //     document.getElementById("shuffleResumeButton").style.display = "block";
+            // }
     		document.getElementById("startShuffleButton").style.display = "block";
             document.getElementById("declareWinnerButton").style.display = "block";
             document.getElementById("backToLastCallButton").style.display = "block";
@@ -131,6 +134,7 @@
         if(localStorage.getItem("status") == "declaration")
         {
             hideButtons();
+            window._shuffle_.stop();
             document.getElementById("winnerButtonRed").style.display = "block";
             document.getElementById("winnerButtonBlue").style.display = "block";
             document.getElementById("winnerButtonYellow").style.display = "block";
@@ -161,11 +165,12 @@
          document.getElementById("backToOpenButton").style.display = "none";
          document.getElementById("lastCallPauseButton").style.display = "none";
          document.getElementById("lastCallResumeButton").style.display = "none";
+        //  document.getElementById("shuffleResumeButton").style.display = "none";
          document.getElementById("startShuffleButton").style.display = "none";
          document.getElementById("stopShuffleButton").style.display = "none";
          document.getElementById("declareWinnerButton").style.display = "none";
          document.getElementById("backToLastCallButton").style.display = "none";
-         document.getElementById("shufflePauseButton").style.display = "none";
+        //  document.getElementById("shufflePauseButton").style.display = "none";
          document.getElementById("winnerButtonRed").style.display = "none";
          document.getElementById("winnerButtonBlue").style.display = "none";
          document.getElementById("winnerButtonYellow").style.display = "none";

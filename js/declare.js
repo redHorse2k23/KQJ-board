@@ -1,7 +1,6 @@
 function declareRed(){
     localStorage.setItem("winner", "red");
     localStorage.setItem("status", "declared");
-
 }
 
 
